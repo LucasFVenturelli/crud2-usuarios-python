@@ -1,7 +1,6 @@
 from app.main import usuarios, app
 
-def test_criar_usuario():
-    usuarios.clear()  
+def test_criar_usuario(): 
     client = app.test_client()
     resposta = client.post('/usuarios', json={
         'nome': 'andre',
@@ -12,7 +11,6 @@ def test_criar_usuario():
     assert resposta.status_code == 201
 
 def test_listar_usuarios():
-    usuarios.clear()
     client = app.test_client()
     client.post('/usuarios', json={
         'nome': 'genesio',
@@ -25,7 +23,6 @@ def test_listar_usuarios():
     assert isinstance(resposta.get_json(), list)
 
 def test_buscar_usuario_existente():
-    usuarios.clear()
     client = app.test_client()
     client.post('/usuarios', json={
         'nome': 'Carlos',
@@ -38,13 +35,11 @@ def test_buscar_usuario_existente():
     assert resposta.get_json()['nome'] == 'Carlos'
 
 def test_buscar_usuario_inexistente():
-    usuarios.clear()
     client = app.test_client()
     resposta = client.get('/usuarios/99999999999')
     assert resposta.status_code == 404
 
-def test_deletar_usuario_existente():
-    usuarios.clear()
+def test_deletar_usuario_existente():   
     client = app.test_client()
     client.post('/usuarios', json={
         'nome': 'Ana',
@@ -56,7 +51,6 @@ def test_deletar_usuario_existente():
     assert resposta.status_code == 200
 
 def test_deletar_usuario_inexistente():
-    usuarios.clear()
     client = app.test_client()
     resposta = client.delete('/usuarios/00000000000')
     assert resposta.status_code == 404
