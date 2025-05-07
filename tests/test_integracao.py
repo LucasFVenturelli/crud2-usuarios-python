@@ -1,13 +1,8 @@
-import pytest
 from app.main import usuarios, app
 
-@pytest.fixture
-def client():
-    with app.test_client() as client:
-        yield client
-    usuarios.clear()
-
-def test_criar_usuario(client):
+def test_criar_usuario():
+    usuarios.clear()  
+    client = app.test_client()
     resposta = client.post('/usuarios', json={
         'nome': 'andre',
         'email': 'andre123@email.com',
@@ -16,7 +11,9 @@ def test_criar_usuario(client):
     })
     assert resposta.status_code == 201
 
-def test_listar_usuarios(client):
+def test_listar_usuarios():
+    usuarios.clear()
+    client = app.test_client()
     client.post('/usuarios', json={
         'nome': 'genesio',
         'email': 'genesio@email.com',
@@ -27,7 +24,9 @@ def test_listar_usuarios(client):
     assert resposta.status_code == 200
     assert isinstance(resposta.get_json(), list)
 
-def test_buscar_usuario_existente(client):
+def test_buscar_usuario_existente():
+    usuarios.clear()
+    client = app.test_client()
     client.post('/usuarios', json={
         'nome': 'Carlos',
         'email': 'carlos@email.com',
@@ -38,11 +37,15 @@ def test_buscar_usuario_existente(client):
     assert resposta.status_code == 200
     assert resposta.get_json()['nome'] == 'Carlos'
 
-def test_buscar_usuario_inexistente(client):
+def test_buscar_usuario_inexistente():
+    usuarios.clear()
+    client = app.test_client()
     resposta = client.get('/usuarios/99999999999')
     assert resposta.status_code == 404
 
-def test_deletar_usuario_existente(client):
+def test_deletar_usuario_existente():
+    usuarios.clear()
+    client = app.test_client()
     client.post('/usuarios', json={
         'nome': 'Ana',
         'email': 'ana@email.com',
@@ -52,6 +55,8 @@ def test_deletar_usuario_existente(client):
     resposta = client.delete('/usuarios/44455566677')
     assert resposta.status_code == 200
 
-def test_deletar_usuario_inexistente(client):
+def test_deletar_usuario_inexistente():
+    usuarios.clear()
+    client = app.test_client()
     resposta = client.delete('/usuarios/00000000000')
     assert resposta.status_code == 404
